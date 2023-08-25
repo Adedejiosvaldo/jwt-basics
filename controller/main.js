@@ -12,12 +12,13 @@ const login = async (req, res) => {
   }
   console.log(username, password);
 
-  const id = new Date().getMilliseconds;
-  console.log(username, password);
-  const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+  const id = new Date().getMilliseconds();
+  console.log(id);
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRETS, {
     expiresIn: "30d",
   });
-  console.log(username, password);
+  console.log(token);
+
   res.status(200).json({ msg: "Fake Login Route /Signup", token });
 };
 const dashBoard = async (req, res) => {

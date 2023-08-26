@@ -4,10 +4,10 @@ const jwt = require("jsonwebtoken");
 // 1. Mongoose
 // 2. JOi
 // 3. controller
+
 const login = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    // res.send("You have to input a username and username");
     throw new CustomAPIError("Please Provide Email and Password", 400);
   }
   console.log(username, password);
@@ -21,7 +21,9 @@ const login = async (req, res) => {
 
   res.status(200).json({ msg: "Fake Login Route /Signup", token });
 };
+
 const dashBoard = async (req, res) => {
+  console.log(req.headers);
   const luckyNumber = Math.floor(Math.random() * 100);
   res.status(200).json({
     msg: `Hello Joseph`,

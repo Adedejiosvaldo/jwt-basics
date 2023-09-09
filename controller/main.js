@@ -1,15 +1,15 @@
-const CustomAPIError = require("../errors/custom-error");
+const { BadRequest, UnAuthenticatedError } = require("../errors");
+
 const jwt = require("jsonwebtoken");
 
 // validation Types
 // 1. Mongoose
 // 2. JOi
 // 3. controller
-
 const login = async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) {
-    throw new CustomAPIError("Please Provide Email and Password", 400);
+    throw new BadRequest("Please Provide Email and Password");
   }
   const id = new Date().getMilliseconds();
 
@@ -21,7 +21,6 @@ const login = async (req, res) => {
 };
 
 const dashBoard = async (req, res) => {
-  console.log("dashbpard", req.user);
   try {
     const secureDate = Math.floor(Math.random() * 100);
     res.status(200).json({
@@ -29,7 +28,7 @@ const dashBoard = async (req, res) => {
       secret: `Here is your personalized data  ${secureDate}`,
     });
   } catch (error) {
-    throw new CustomAPIError("Not authorized to access route", 401);
+    throw new UnAuthenticatedError("Not authorized to access route");
   }
 };
 

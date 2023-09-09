@@ -1,5 +1,6 @@
 const CustomAPIError = require("../errors/custom-error");
 const jwt = require("jsonwebtoken");
+
 // validation Types
 // 1. Mongoose
 // 2. JOi
@@ -10,16 +11,14 @@ const login = async (req, res) => {
   if (!username || !password) {
     throw new CustomAPIError("Please Provide Email and Password", 400);
   }
-  console.log(username, password);
-
   const id = new Date().getMilliseconds();
-  console.log(id);
+
   const token = jwt.sign({ id, username }, process.env.JWT_SECRETS, {
     expiresIn: "30d",
   });
   console.log(token);
 
-  res.status(200).json({ msg: "Fake Login Route /Signup", token });
+  res.status(200).json({ msg: "User Created!", token });
 };
 
 const dashBoard = async (req, res) => {
@@ -30,12 +29,17 @@ const dashBoard = async (req, res) => {
   }
 
   const token = authHeader.split(" ")[1];
-  console.log(token);
-  const luckyNumber = Math.floor(Math.random() * 100);
-  res.status(200).json({
-    msg: `Hello Joseph`,
-    secret: `Here is your secret token ${luckyNumber}`,
-  });
+
+  try {
+    const decode = jwt.verify(token, process.env.JWT_SECRETS);
+    console.log(decode);
+    res.status(200).json({
+      msg: `Hello ${decode.username}`,
+      secret: `Here is your secret token ${token}`,
+    });
+  } catch (error) {
+    throw new CustomAPIError("Not authorized to access route", 401);
+  }
 };
 
 module.exports = { dashBoard, login };
